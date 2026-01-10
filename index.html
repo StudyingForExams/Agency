@@ -25,7 +25,6 @@ body::before {
   inset:-10%;
   background: radial-gradient(circle at top, #1c1f44, #13152C 60%);
   z-index:-3;
-  transition: transform 0.1s linear;
 }
 
 /* ===== PARTICLES ===== */
@@ -45,7 +44,7 @@ canvas {
   height: 56px;
   border-radius: 50%;
   background: radial-gradient(circle at 30% 30%, #D1D4FF, #6E78F7);
-  box-shadow: 0 0 25px rgba(130,133,198,0.8);
+  box-shadow: 0 0 30px rgba(130,133,198,0.9);
   animation: pulse 3s ease-in-out infinite;
   z-index: 5;
 }
@@ -143,12 +142,10 @@ canvas {
     inset 0 0 14px rgba(255,255,255,0.08);
 }
 
-#menu-bar svg {
+#menu-bar img {
   width: 22px;
   height: 22px;
-  stroke: #E8ECFF;
-  fill: none;
-  stroke-width: 2;
+  filter: brightness(0) invert(1);
 }
 
 /* ===== SEARCH OVERLAY ===== */
@@ -202,26 +199,11 @@ canvas {
   </div>
 
   <div id="menu-bar">
-    <button>
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/></svg>
-      Entertainment
-    </button>
-    <button>
-      <svg viewBox="0 0 24 24"><path d="M3 11l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
-      Home
-    </button>
-    <button>
-      <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="3"/><circle cx="8" cy="12" r="1"/><circle cx="16" cy="12" r="1"/></svg>
-      Games
-    </button>
-    <button>
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a7.5 7.5 0 0 0 0-6"/><path d="M4.6 9a7.5 7.5 0 0 0 0 6"/></svg>
-      Settings
-    </button>
-    <button>
-      <svg viewBox="0 0 24 24"><path d="M12 2v20"/><path d="M5 7h14"/><path d="M5 17h14"/></svg>
-      Admin Panel
-    </button>
+    <button><img src="https://www.svgrepo.com/show/430129/television-technology-entertainment.svg">Entertainment</button>
+    <button><img src="https://www.svgrepo.com/show/471518/home-03.svg">Home</button>
+    <button><img src="https://www.svgrepo.com/show/333091/games.svg">Games</button>
+    <button><img src="https://www.svgrepo.com/show/506315/settings.svg">Settings</button>
+    <button><img src="https://www.svgrepo.com/show/372709/terminal.svg">Admin Panel</button>
   </div>
 </div>
 
@@ -256,45 +238,60 @@ resize();
 
 const colors = ["#6E78F7","#8285C6","#44498A"];
 
-const particles = Array.from({length: 90}, () => ({
+const particles = Array.from({length: 110}, () => ({
   x: Math.random()*w,
   y: Math.random()*h,
-  r: Math.random()*2+1,
-  dx: (Math.random()-0.5)*0.2,
-  dy: (Math.random()-0.5)*0.2,
+  r: Math.random()*4 + 2,
+  dx: (Math.random()-0.5)*0.15,
+  dy: (Math.random()-0.5)*0.15,
   c: colors[Math.floor(Math.random()*colors.length)],
-  a: Math.random()*0.5+0.5,
-  star: Math.random()<0.3
+  a: Math.random()*0.6 + 0.4,
+  type: Math.floor(Math.random()*3)
 }));
 
-let mx = 0, my = 0;
-window.addEventListener("mousemove", e => {
-  mx = (e.clientX / w - 0.5) * 10;
-  my = (e.clientY / h - 0.5) * 10;
-  document.body.style.setProperty("--px", mx + "px");
-});
+function drawStar(x,y,r,points){
+  const step = Math.PI / points;
+  ctx.beginPath();
+  for(let i=0;i<2*points;i++){
+    const rad = i%2===0 ? r : r/2;
+    ctx.lineTo(
+      x + Math.cos(i*step)*rad,
+      y + Math.sin(i*step)*rad
+    );
+  }
+  ctx.closePath();
+}
 
 function draw() {
   ctx.clearRect(0,0,w,h);
   for (const p of particles) {
-    ctx.beginPath();
-    if (p.star) {
+    ctx.shadowColor = p.c;
+    ctx.shadowBlur = 22;
+
+    if(p.type===0){
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = p.c;
+      ctx.globalAlpha = p.a;
+      ctx.fill();
+    } else if(p.type===1){
+      drawStar(p.x,p.y,p.r,5);
+      ctx.fillStyle = p.c;
+      ctx.globalAlpha = p.a;
+      ctx.fill();
+    } else {
+      ctx.beginPath();
       ctx.moveTo(p.x, p.y-p.r);
       ctx.lineTo(p.x+p.r, p.y+p.r);
       ctx.lineTo(p.x-p.r, p.y+p.r);
       ctx.closePath();
-    } else {
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = p.c;
+      ctx.globalAlpha = p.a;
+      ctx.fill();
     }
-    ctx.fillStyle = p.c;
-    ctx.globalAlpha = p.a;
-    ctx.shadowColor = p.c;
-    ctx.shadowBlur = 12;
-    ctx.fill();
 
-    p.x += p.dx + mx*0.02;
-    p.y += p.dy + my*0.02;
-
+    p.x += p.dx;
+    p.y += p.dy;
     if (p.x<0||p.x>w) p.dx*=-1;
     if (p.y<0||p.y>h) p.dy*=-1;
   }
