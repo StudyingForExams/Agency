@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Oasis</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="images/oasis.png">
+
+<style>
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  font-family: 'Baloo 2', cursive;
+  overflow: hidden;
+  color: #e8ecff;
+  background: #02040a;
+}
+
+/* ===== MOONLIGHT BACKGROUND ===== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at top, rgba(160,190,255,.18), transparent 45%),
+    linear-gradient(135deg, #040812, #0b1230, #141b4d, #1a2260);
+  background-size: 200% 200%;
+  animation: bgMove 20s ease infinite;
+  z-index: -3;
+}
+
+@keyframes bgMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== PARTICLES ===== */
+canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+}
+
+/* ===== INTRO ANIMATION ===== */
+#intro {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(20px);
+  background: rgba(5,10,30,.85);
+  z-index: 50;
+  animation: introFade 1.8s ease forwards;
+}
+
+#intro h1 {
+  font-size: 72px;
+  color: #eef2ff;
+  text-shadow:
+    0 0 20px rgba(150,180,255,.8),
+    0 0 40px rgba(100,140,255,.6);
+  animation: introPop 1.8s ease forwards;
+}
+
+@keyframes introPop {
+  0% { transform: scale(.6); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@keyframes introFade {
+  0% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; pointer-events: none; }
+}
+
+/* ===== TITLE ===== */
+#title {
+  position: fixed;
+  top: 26px;
+  width: 100%;
+  text-align: center;
+  font-size: 64px;
+  text-shadow:
+    0 0 14px rgba(140,170,255,.7),
+    0 0 35px rgba(100,130,255,.4);
+  z-index: 5;
+  transition: opacity .4s ease;
+}
+
+/* ===== MENU ===== */
+#menu {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding-top: 90px;
+  z-index: 2;
+  animation: menuRise 1.2s ease;
+}
+
+@keyframes menuRise {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  width: 160px;
+  height: 160px;
+  border-radius: 22px;
+  background: rgba(120,150,255,.1);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(180,200,255,.3);
+  box-shadow:
+    0 0 30px rgba(120,160,255,.35),
+    inset 0 0 15px rgba(200,220,255,.18);
+  cursor: pointer;
+  transition: all .35s ease;
+}
+
+.btn:hover {
+  transform: scale(1.2);
+  box-shadow:
+    0 0 60px rgba(160,200,255,.9),
+    inset 0 0 22px rgba(220,235,255,.35);
+}
+
+.btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== VIEWER ===== */
+#viewer {
+  display: none;
+  height: 100vh;
+  width: 100vw;
+  animation: fadeIn .5s ease;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: black;
+}
+
+/* ===== BACK BUTTON ===== */
+.back {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: rgba(100,130,255,.25);
+  border: 1px solid rgba(180,200,255,.35);
+  box-shadow: 0 0 20px rgba(140,170,255,.6);
+  cursor: pointer;
+  transition: all .25s ease;
+  z-index: 10;
+}
+
+.back:hover {
+  transform: scale(1.12);
+}
+
+/* ===== FOOTER ===== */
+#footer {
+  position: fixed;
+  bottom: 36px;
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(200,210,255,.75);
+  transition: opacity .4s ease;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="intro"><h1>Oasis</h1></div>
+
+<canvas id="particles"></canvas>
+
+<div id="title">Oasis</div>
+
+<div id="menu">
+  <div class="btn" onclick="go('site1')"><img src="images/btn1.png"></div>
+  <div class="btn" onclick="go('site2')"><img src="images/btn2.png"></div>
+  <div class="btn" onclick="go('site3')"><img src="images/btn3.png"></div>
+  <div class="btn" onclick="go('site4')"><img src="images/btn4.png"></div>
+  <div class="btn" onclick="go('site5')"><img src="images/btn5.png"></div>
+</div>
+
+<div id="viewer">
+  <div class="back" onclick="go('')">← Back</div>
+  <iframe id="frame"></iframe>
+</div>
+
+<div id="footer">
+© Solar Smash may be broken • Roblox works • If banned use /School
+</div>
+
+<script>
+/* ===== LINKS ===== */
+const sites = {
+  site1: "https://client.eaglercraft.win/eagler-files/1.8/Main/index.html",
+  site2: "https://studyingforexams.github.io/Roblox/",
+  site3: "https://deli-game.github.io/geometry-dash/",
+  site4: "https://studyingforexams.github.io/Solar-Smash/",
+  site5: "https://freegamesunblocked76.github.io/retro-bowl/"
+};
+
+const menu = document.getElementById("menu");
+const viewer = document.getElementById("viewer");
+const frame = document.getElementById("frame");
+const title = document.getElementById("title");
+const footer = document.getElementById("footer");
+
+function go(page) {
+  location.hash = page;
+}
+
+function loadPage() {
+  const hash = location.hash.replace("#", "");
+  if (sites[hash]) {
+    menu.style.display = "none";
+    viewer.style.display = "block";
+    frame.src = sites[hash];
+    title.classList.add("hidden");
+    footer.classList.add("hidden");
+  } else {
+    menu.style.display = "flex";
+    viewer.style.display = "none";
+    frame.src = "";
+    title.classList.remove("hidden");
+    footer.classList.remove("hidden");
+  }
+}
+
+window.addEventListener("hashchange", loadPage);
+loadPage();
+
+/* ===== PARTICLES (SUNSHINE STYLE) ===== */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resize();
+addEventListener("resize", resize);
+
+const particles = Array.from({ length: 60 }, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  r: Math.random() * 2.5 + .8,
+  dy: Math.random() * -.25 - .05,
+  a: Math.random() * .4 + .15
+}));
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(160,190,255,${p.a})`;
+    ctx.fill();
+    p.y += p.dy;
+    if (p.y < -10) {
+      p.y = canvas.height + 10;
+      p.x = Math.random() * canvas.width;
+    }
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+
+</body>
+</html>
