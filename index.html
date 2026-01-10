@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Agency</title>
+<title>The Agency</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&display=swap" rel="stylesheet">
@@ -18,8 +18,8 @@
 
 body {
   height: 100vh;
-  font-family: 'Baloo 2', cursive;
   overflow: hidden;
+  font-family: 'Baloo 2', cursive;
   color: #e8ecff;
   background: #02040a;
 }
@@ -51,7 +51,7 @@ canvas {
   z-index: -2;
 }
 
-/* ===== INTRO ANIMATION ===== */
+/* ===== INTRO ===== */
 #intro {
   position: fixed;
   inset: 0;
@@ -85,6 +85,33 @@ canvas {
   100% { opacity: 0; pointer-events: none; }
 }
 
+/* ===== MOON PLACEHOLDER ===== */
+#moon {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at top left,
+    #ffffff,
+    #cfd8ff,
+    #9aa7ff
+  );
+  box-shadow:
+    0 0 25px rgba(170,200,255,.8),
+    inset -6px -6px 12px rgba(100,120,255,.6);
+  animation: moonPulse 3.5s ease-in-out infinite;
+  z-index: 6;
+}
+
+@keyframes moonPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
 /* ===== TITLE ===== */
 #title {
   position: fixed;
@@ -108,6 +135,7 @@ canvas {
   padding-top: 90px;
   z-index: 2;
   animation: menuRise 1.2s ease;
+  filter: drop-shadow(0 0 25px rgba(140,180,255,0.25));
 }
 
 @keyframes menuRise {
@@ -115,32 +143,44 @@ canvas {
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* ===== BUTTONS ===== */
+/* ===== APP ICON BUTTONS ===== */
 .btn {
   width: 160px;
   height: 160px;
-  border-radius: 22px;
-  background: rgba(120,150,255,.1);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(180,200,255,.3);
+  border-radius: 28px;
+  background: linear-gradient(
+    145deg,
+    rgba(140,170,255,0.18),
+    rgba(80,110,255,0.08)
+  );
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(190,210,255,0.35);
   box-shadow:
-    0 0 30px rgba(120,160,255,.35),
-    inset 0 0 15px rgba(200,220,255,.18);
+    0 12px 30px rgba(20,40,120,0.6),
+    0 0 35px rgba(140,180,255,0.45),
+    inset 0 1px 1px rgba(255,255,255,0.35),
+    inset 0 -8px 16px rgba(120,150,255,0.15);
   cursor: pointer;
-  transition: all .35s ease;
+  transition:
+    transform 0.35s cubic-bezier(.2,.8,.2,1),
+    box-shadow 0.35s ease;
 }
 
 .btn:hover {
-  transform: scale(1.2);
+  transform: translateY(-6px) scale(1.18);
   box-shadow:
-    0 0 60px rgba(160,200,255,.9),
-    inset 0 0 22px rgba(220,235,255,.35);
+    0 20px 45px rgba(40,60,160,0.75),
+    0 0 70px rgba(170,210,255,0.95),
+    inset 0 2px 2px rgba(255,255,255,0.45),
+    inset 0 -12px 20px rgba(160,190,255,0.25);
 }
 
 .btn img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 22px;
+  filter: drop-shadow(0 6px 12px rgba(30,60,160,0.6));
 }
 
 /* ===== VIEWER ===== */
@@ -202,11 +242,13 @@ iframe {
 
 <body>
 
-<div id="intro"><h1>Agency</h1></div>
+<div id="intro"><h1>The Agency</h1></div>
+
+<div id="moon"></div>
 
 <canvas id="particles"></canvas>
 
-<div id="title">Agency</div>
+<div id="title">The Agency</div>
 
 <div id="menu">
   <div class="btn" onclick="go('site1')"><img src="images/btn1.png"></div>
@@ -222,11 +264,11 @@ iframe {
 </div>
 
 <div id="footer">
-© Solar Smash may be broken • Roblox works • If banned use /School
+© Admin Site.
 </div>
 
 <script>
-/* ===== LINKS ===== */
+/* ===== NAV ===== */
 const sites = {
   site1: "https://client.eaglercraft.win/eagler-files/1.8/Main/index.html",
   site2: "https://studyingforexams.github.io/Roblox/",
@@ -265,7 +307,7 @@ function loadPage() {
 window.addEventListener("hashchange", loadPage);
 loadPage();
 
-/* ===== PARTICLES (SUNSHINE STYLE) ===== */
+/* ===== SUNSHINE PARTICLES ===== */
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
 
@@ -276,30 +318,52 @@ function resize() {
 resize();
 addEventListener("resize", resize);
 
-const particles = Array.from({ length: 60 }, () => ({
+const shapes = ["circle", "diamond", "square"];
+
+const particles = Array.from({ length: 140 }, () => ({
   x: Math.random() * canvas.width,
   y: Math.random() * canvas.height,
-  r: Math.random() * 2.5 + .8,
-  dy: Math.random() * -.25 - .05,
-  a: Math.random() * .4 + .15
+  size: Math.random() * 3 + 1.2,
+  speed: Math.random() * 0.25 + 0.05,
+  drift: (Math.random() - 0.5) * 0.15,
+  alpha: Math.random() * 0.35 + 0.15,
+  shape: shapes[Math.floor(Math.random() * shapes.length)]
 }));
 
-function draw() {
+function drawParticle(p) {
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  ctx.fillStyle = `rgba(160,190,255,${p.alpha})`;
+  ctx.shadowColor = "rgba(160,190,255,0.8)";
+  ctx.shadowBlur = 18;
+
+  ctx.beginPath();
+  if (p.shape === "circle") {
+    ctx.arc(0, 0, p.size, 0, Math.PI * 2);
+  } else if (p.shape === "diamond") {
+    ctx.rotate(Math.PI / 4);
+    ctx.rect(-p.size, -p.size, p.size * 2, p.size * 2);
+  } else {
+    ctx.rect(-p.size, -p.size, p.size * 2, p.size * 2);
+  }
+  ctx.fill();
+  ctx.restore();
+}
+
+function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particles.forEach(p => {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(160,190,255,${p.a})`;
-    ctx.fill();
-    p.y += p.dy;
-    if (p.y < -10) {
-      p.y = canvas.height + 10;
+  for (const p of particles) {
+    drawParticle(p);
+    p.y -= p.speed;
+    p.x += p.drift;
+    if (p.y < -20) {
+      p.y = canvas.height + 20;
       p.x = Math.random() * canvas.width;
     }
-  });
-  requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(animate);
 }
-draw();
+animate();
 </script>
 
 </body>
