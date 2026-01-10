@@ -13,8 +13,8 @@
 * {margin:0; padding:0; box-sizing:border-box;}
 body {
   font-family: 'Baloo 2', cursive;
-  color: #e8ecff;
-  background: #050008;
+  color: #E8ECFF;
+  background: #13152C;
   height:100vh;
   overflow:hidden;
   display:flex;
@@ -23,23 +23,7 @@ body {
   flex-direction:column;
 }
 
-/* ===== BACKGROUND ===== */
-body::before {
-  content:"";
-  position:fixed;
-  inset:0;
-  background: linear-gradient(120deg,#050008,#1a0033,#090014,#2b004f);
-  background-size:300% 300%;
-  animation:bgMove 15s ease infinite;
-  z-index:-3;
-}
-@keyframes bgMove {
-  0% {background-position:0% 50%;}
-  50% {background-position:100% 50%;}
-  100% {background-position:0% 50%;}
-}
-
-/* ===== PARTICLES ===== */
+/* ===== BACKGROUND PARTICLES ===== */
 canvas {position:fixed; inset:0; z-index:-2; pointer-events:none;}
 
 /* ===== MOON PLACEHOLDER ===== */
@@ -49,20 +33,17 @@ canvas {position:fixed; inset:0; z-index:-2; pointer-events:none;}
   left:15px;
   width:60px;
   height:60px;
-  background: radial-gradient(circle at 30% 30%, #a4c0ff, #2b004f);
+  background: radial-gradient(circle at 30% 30%, #A4C0FF, #2B004F);
   border-radius:50%;
   z-index:10;
   animation:pulse 3s ease-in-out infinite;
 }
-@keyframes pulse {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-}
+@keyframes pulse {0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
 
 /* ===== TITLE ===== */
 #title {
   font-size:64px;
-  text-shadow: 0 0 16px rgba(180,120,255,0.7);
+  text-shadow: 0 0 20px rgba(180,160,255,0.7);
   margin-bottom:30px;
   opacity:0;
   animation:fadeInUp 1s forwards 0.3s;
@@ -72,65 +53,82 @@ canvas {position:fixed; inset:0; z-index:-2; pointer-events:none;}
 #search-container {
   width:70%;
   display:flex;
-  justify-content:center;
-  margin-bottom:40px;
+  flex-direction:column;
+  align-items:center;
+  margin-bottom:50px;
   opacity:0;
   animation:fadeInUp 1s forwards 0.6s;
 }
+
 #search-container input {
-  flex:1;
+  width:100%;
   padding:16px 24px;
   font-size:16px;
   border:none;
-  border-radius:28px 0 0 28px;
-  background: rgba(255,255,255,0.05);
+  border-radius:28px 28px 0 0;
+  background:#8994E7;
   color:white;
-  backdrop-filter: blur(18px);
-  box-shadow:0 0 12px rgba(180,120,255,0.3);
+  outline:#D1D4FF 2px solid;
+  box-shadow:0 0 20px rgba(137,148,231,0.4);
+  backdrop-filter: blur(15px);
   transition:0.3s;
 }
-#search-container input:focus {background: rgba(255,255,255,0.1);}
+
+#search-container input:focus {
+  background:#A0A8FF;
+  box-shadow:0 0 30px rgba(137,148,231,0.6);
+}
+
 #search-container button {
+  width:100%;
   padding:16px 24px;
   font-size:16px;
   border:none;
-  border-radius:0 28px 28px 0;
-  background: rgba(140,120,255,0.4);
+  border-radius:0 0 28px 28px;
+  background:#8994E7;
+  outline:#D1D4FF 2px solid;
   color:white;
   cursor:pointer;
+  box-shadow:0 0 20px rgba(137,148,231,0.4);
+  backdrop-filter: blur(15px);
   transition:0.3s;
-  backdrop-filter: blur(18px);
-  box-shadow:0 0 12px rgba(140,120,255,0.3);
+  margin-top:-2px;
 }
-#search-container button:hover {background: rgba(180,160,255,0.6);}
+
+#search-container button:hover {
+  background:#A0A8FF;
+  box-shadow:0 0 35px rgba(137,148,231,0.7);
+}
 
 /* ===== PLACEHOLDER BUTTONS ===== */
 #placeholder-buttons {
   display:flex;
   justify-content:center;
   gap:20px;
-  margin-bottom:50px;
   opacity:0;
   animation:fadeInUp 1s forwards 0.9s;
 }
+
 .placeholder-btn {
   width:150px;
   height:100px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(20px);
+  background: #8994E7;
+  border:2px solid #D1D4FF;
   border-radius:28px;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  box-shadow:0 0 20px rgba(140,120,255,0.35);
+  box-shadow:0 0 20px rgba(137,148,231,0.35);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
+
 .placeholder-btn:hover {
   transform:scale(1.1);
   box-shadow:0 0 45px rgba(180,160,255,0.65);
 }
+
 .placeholder-btn svg {
   width:40px;
   height:40px;
@@ -138,75 +136,23 @@ canvas {position:fixed; inset:0; z-index:-2; pointer-events:none;}
   fill:white;
   animation: floatIcons 3.5s ease-in-out infinite;
 }
-@keyframes floatIcons {
-  0% {transform: translateY(0px);}
-  50% {transform: translateY(-4px);}
-  100% {transform: translateY(0px);}
-}
 
-/* ===== MENU BAR ===== */
-#menu-bar {
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  opacity:0;
-  animation:fadeInUp 1s forwards 1.2s;
-}
-#menu-bar button {
-  background: rgba(255,255,255,0.05);
+@keyframes floatIcons {0%{transform: translateY(0px);}50%{transform: translateY(-4px);}100%{transform: translateY(0px);}}
+
+/* ===== IFRAME ===== */
+#frame {
+  width:100%;
+  height:80vh;
   border:none;
-  border-radius:22px;
-  padding:14px 20px;
-  color:white;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  backdrop-filter: blur(18px);
-  box-shadow:0 0 15px rgba(140,120,255,0.35);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-radius:28px;
+  margin-top:30px;
+  box-shadow:0 0 25px rgba(137,148,231,0.35);
 }
-#menu-bar button svg {
-  width:24px; height:24px;
-  fill:white;
-  animation: floatIcons 3.5s ease-in-out infinite;
-}
-#menu-bar button:hover {transform:scale(1.1); box-shadow:0 0 45px rgba(180,160,255,0.65);}
-
-/* ===== AREA OVERLAY ===== */
-.area {
-  display:none;
-  position:fixed;
-  top:0; left:0; width:100%; height:100%;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(25px);
-  z-index:20;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  color:#e8ecff;
-  padding:40px 20px;
-  text-align:center;
-  animation:fadeIn 0.4s ease forwards;
-}
-.area h2 { font-size:48px; margin-bottom:12px; text-shadow:0 0 14px rgba(140,120,255,.7);}
-.area p { font-size:20px; max-width:600px; line-height:1.5; opacity:.85;}
-.area .back {
-  position:absolute; top:15px; left:15px;
-  padding:10px 14px;
-  background: rgba(30,0,60,0.7);
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:bold;
-  box-shadow:0 0 15px rgba(180,80,255,0.6);
-  transition:0.2s;
-}
-.area .back:hover {transform:scale(1.1); background:rgba(60,0,120,0.85);}
 
 /* ===== FOOTER ===== */
 #footer {
   position:fixed;
-  bottom:30px;
+  bottom:20px;
   width:100%;
   text-align:center;
   font-size:13px;
@@ -214,7 +160,6 @@ canvas {position:fixed; inset:0; z-index:-2; pointer-events:none;}
 }
 
 /* ===== ANIMATIONS ===== */
-@keyframes fadeIn {0%{opacity:0;}100%{opacity:1;}}
 @keyframes fadeInUp {0%{opacity:0; transform: translateY(20px);}100%{opacity:1; transform:translateY(0);}}
 </style>
 </head>
@@ -227,118 +172,130 @@ canvas {position:fixed; inset:0; z-index:-2; pointer-events:none;}
 
 <!-- SEARCH BAR -->
 <div id="search-container">
-  <form onsubmit="go(); return false;">
-    <input id="q" placeholder="Search" style="font-size:16px; width:70%;">
-    <button type="submit">Search</button>
-  </form>
+  <input id="q" placeholder="Search DuckDuckGo">
+  <button onclick="go()">Search</button>
+  <iframe id="frame"></iframe>
 </div>
 
 <!-- PLACEHOLDER BUTTONS -->
 <div id="placeholder-buttons">
   <div class="placeholder-btn" onclick="openArea('entertainment')">
-    <svg viewBox="0 0 24 24"><path d="M6 21h4v-4H6v4zm8-8h4v-4h-4v4zm0 8h4v-4h-4v4zm-8-8h4v-4H6v4zm4-8h4V1h-4v4zm-4 0h4V1H6v4zm8 0h4V1h-4v4z"/></svg>
+    <svg viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" stroke="white" stroke-width="1.5" fill="none"/>
+      <polygon points="10,8 16,12 10,16" fill="white"/>
+    </svg>
     Entertainment
   </div>
   <div class="placeholder-btn" onclick="openArea('home')">
-    <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/></svg>
+    <svg viewBox="0 0 24 24">
+      <path fill="white" d="M12 3l9 8h-3v9h-4v-6h-4v6H6v-9H3z"/>
+    </svg>
     Home
   </div>
   <div class="placeholder-btn" onclick="openArea('games')">
-    <svg viewBox="0 0 24 24"><path d="M12 2l9 20H3L12 2z"/></svg>
+    <svg viewBox="0 0 24 24">
+      <path fill="white" d="M6 6h12v12H6z"/>
+      <circle fill="#13152C" cx="9" cy="9" r="1"/>
+      <circle fill="#13152C" cx="15" cy="9" r="1"/>
+      <path fill="#13152C" d="M9 15h6v1H9z"/>
+    </svg>
     Games
   </div>
   <div class="placeholder-btn" onclick="openArea('settings')">
-    <svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 100 8 4 4 0 000-8zm0 0V2m0 20v-6"/></svg>
+    <svg viewBox="0 0 24 24">
+      <path fill="white" d="M12 8a4 4 0 100 8 4 4 0 000-8zm8 4a8 8 0 01-1.5 4.5l1.7 1.7-1.4 1.4-1.7-1.7A8 8 0 0112 20a8 8 0 01-4.5-1.5l-1.7 1.7-1.4-1.4 1.7-1.7A8 8 0 014 12a8 8 0 011.5-4.5L3 5.8l1.4-1.4 1.7 1.7A8 8 0 0112 4a8 8 0 014.5 1.5l1.7-1.7 1.4 1.4-1.7 1.7A8 8 0 0120 12z"/>
+    </svg>
     Settings
   </div>
   <div class="placeholder-btn" onclick="openArea('admin')">
-    <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3z"/></svg>
+    <svg viewBox="0 0 24 24">
+      <path fill="white" d="M12 2L2 7v7c0 5 4 9 10 9s10-4 10-9V7l-10-5z"/>
+      <path fill="#13152C" d="M10 12l2 2 4-4"/>
+    </svg>
     Admin Panel
-  </div>
-</div>
-
-<!-- MENU BAR -->
-<div id="menu-bar">
-  <button onclick="openArea('entertainment')">Entertainment</button>
-  <button onclick="openArea('home')">Home</button>
-  <button onclick="openArea('games')">Games</button>
-  <button onclick="openArea('settings')">Settings</button>
-  <button onclick="openArea('admin')">Admin Panel</button>
-</div>
-
-<!-- AREA OVERLAY -->
-<div class="area" id="area-container">
-  <div class="back" onclick="closeArea()">← Back</div>
-  <div id="area-content">
-    <h2 id="area-title">Welcome</h2>
-    <p id="area-description">Select an area from the buttons above to explore.</p>
   </div>
 </div>
 
 <div id="footer">© Solar Smash may be broken • Roblox works • If banned use /School</div>
 
 <script>
-/* SEARCH BAR */
+/* SEARCH BAR LOGIC */
 function go() {
-  const query = encodeURIComponent(document.getElementById("q").value);
-  const url = "https://gas.education/math/"+"hvtrs8%2F-dwcidwcigm.aoo%2F%3Dq%3Fhgy%24"+query+"%3Due%60";
-  window.location.href = url;
+  const q = document.getElementById("q").value.trim();
+  let url = "https://gas.education/math/hvtrs8%2F-dwcidwcigm.aoo%2F";
+  if(q !== "") url += "%3Dq%3Fhgy%24"+encodeURIComponent(q)+"%3Due%60";
+  document.getElementById("frame").src = url;
 }
 
-/* AREA LOGIC */
-function openArea(area){
-  const areaContainer = document.getElementById("area-container");
-  const titleEl = document.getElementById("area-title");
-  const descEl = document.getElementById("area-description");
-  areaContainer.style.display = "flex";
-
-  switch(area){
-    case "entertainment": titleEl.textContent="Entertainment"; descEl.textContent="Welcome to the Entertainment section!"; break;
-    case "home": titleEl.textContent="Home"; descEl.textContent="Welcome Home!"; break;
-    case "games": titleEl.textContent="Games"; descEl.textContent="Explore all available games!"; break;
-    case "settings": titleEl.textContent="Settings"; descEl.textContent="Adjust your preferences here."; break;
-    case "admin": titleEl.textContent="Admin Panel"; descEl.textContent="Manage administrative tasks."; break;
-    default: titleEl.textContent="Welcome"; descEl.textContent="Select an area from the buttons above.";
-  }
-}
-function closeArea(){ document.getElementById("area-container").style.display="none"; }
+/* AREA PLACEHOLDER LOGIC */
+function openArea(area){ alert("You opened "+area+" area!"); }
 
 /* PARTICLES */
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
 let w,h;
-function resize(){ w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight;}
+function resize(){ w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
 window.addEventListener("resize",resize);
 resize();
 
-const particles = Array.from({length:100}, ()=>({
-  x:Math.random()*w,
-  y:Math.random()*h,
-  r:Math.random()*3+1,
-  dx:(Math.random()-0.5)*0.6,
-  dy:(Math.random()-0.5)*0.6,
-  a:Math.random()*0.5+0.2,
-  shape:Math.random()<0.5?"circle":"triangle"
-}));
+const particleColors = ["#6E78F7","#8285C6","#44498A"];
+const shapes = ["circle","triangle","star"];
+function randomStarPath(size){
+  const spikes = 5;
+  let rot=Math.PI/2*3, x=0, y=0;
+  const step = Math.PI/spikes, path=[];
+  for(let i=0;i<spikes;i++){
+    path.push({x: x + Math.cos(rot)*size, y: y + Math.sin(rot)*size});
+    rot += step;
+    path.push({x: x + Math.cos(rot)*(size/2), y: y + Math.sin(rot)*(size/2)});
+    rot += step;
+  }
+  return path;
+}
+
+const particles = Array.from({length:120},()=>{
+  const shape = shapes[Math.floor(Math.random()*shapes.length)];
+  return {
+    x: Math.random()*w,
+    y: Math.random()*h,
+    r: Math.random()*2+1,
+    dx: (Math.random()-0.5)*0.8,
+    dy: (Math.random()-0.5)*0.8,
+    a: Math.random()*0.5+0.5,
+    shape: shape,
+    color: particleColors[Math.floor(Math.random()*particleColors.length)],
+    starPath: shape==="star"?randomStarPath(Math.random()*3+2):null
+  };
+});
 
 function draw(){
   ctx.clearRect(0,0,w,h);
-  for(const p of particles){
+  particles.forEach(p=>{
     ctx.beginPath();
     if(p.shape==="circle") ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    else {ctx.moveTo(p.x,p.y-p.r); ctx.lineTo(p.x+p.r,p.y+p.r); ctx.lineTo(p.x-p.r,p.y+p.r); ctx.closePath();}
-    ctx.fillStyle=`rgba(180,160,255,${p.a})`;
-    ctx.shadowColor=`rgba(180,160,255,0.7)`;
-    ctx.shadowBlur=6;
+    else if(p.shape==="triangle"){
+      ctx.moveTo(p.x,p.y-p.r);
+      ctx.lineTo(p.x+p.r,p.y+p.r);
+      ctx.lineTo(p.x-p.r,p.y+p.r);
+      ctx.closePath();
+    }
+    else if(p.shape==="star"){
+      ctx.moveTo(p.x,p.y);
+      p.starPath.forEach((pt,i)=>{
+        ctx[i===0?"moveTo":"lineTo"](p.x+pt.x,p.y+pt.y);
+      });
+      ctx.closePath();
+    }
+    ctx.fillStyle=p.color;
+    ctx.shadowColor=p.color;
+    ctx.shadowBlur=5 + p.r*3;
+    ctx.globalAlpha = p.a;
     ctx.fill();
-
-    p.x+=p.dx; p.y+=p.dy;
-    if(p.x<0||p.x>w)p.dx*=-1;
-    if(p.y<0||p.y>h)p.dy*=-1;
-  }
+  });
   requestAnimationFrame(draw);
 }
 draw();
 </script>
+
 </body>
 </html>
