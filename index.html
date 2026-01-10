@@ -4,159 +4,165 @@
 <meta charset="UTF-8">
 <title>The Agency</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
 
 <style>
 /* ===== RESET ===== */
-* {margin:0; padding:0; box-sizing:border-box;}
+* {margin:0;padding:0;box-sizing:border-box;}
 body {
   font-family: 'Baloo 2', cursive;
-  color: #E8ECFF;
+  color: #e8ecff;
   background: #13152C;
-  height:100vh;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  overflow-x: hidden;
+  height: 100vh;
 }
 
-/* ===== BACKGROUND PARTICLES ===== */
+/* ===== BACKGROUND ===== */
+body::before {
+  content:"";
+  position:fixed;
+  inset:0;
+  background: linear-gradient(120deg, #13152C, #1A1B3B, #0F1025);
+  background-size: 300% 300%;
+  animation: bgMove 20s ease infinite;
+  z-index:-3;
+}
+@keyframes bgMove {0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+/* ===== PARTICLES ===== */
 canvas {position:fixed; inset:0; z-index:-2; pointer-events:none;}
 
 /* ===== MOON PLACEHOLDER ===== */
 #moon {
   position: fixed;
-  top:15px;
-  left:15px;
-  width:60px;
-  height:60px;
+  top: 15px;
+  left: 15px;
+  width: 60px;
+  height: 60px;
   background: radial-gradient(circle at 30% 30%, #A4C0FF, #2B004F);
-  border-radius:50%;
+  border-radius: 50%;
   z-index:10;
-  animation:pulse 3s ease-in-out infinite;
+  animation: pulse 3s ease-in-out infinite;
 }
-@keyframes pulse {0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+@keyframes pulse {0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
 
 /* ===== TITLE ===== */
 #title {
-  font-size:64px;
-  text-shadow: 0 0 20px rgba(180,160,255,0.7);
+  text-align:center;
+  font-size:72px;
   margin-top:40px;
-  opacity:0;
-  animation:fadeInUp 1s forwards 0.3s;
+  text-shadow:0 0 14px rgba(180,210,255,.7);
 }
 
 /* ===== SEARCH BAR ===== */
 #search-container {
-  width:400px;
   display:flex;
-  flex-direction:column;
-  align-items:center;
-  margin-top:30px;
-  opacity:0;
-  animation:fadeInUp 1s forwards 0.6s;
+  justify-content:center;
+  margin:30px auto;
 }
-
 #search-container input {
-  width:100%;
-  padding:16px 24px;
-  font-size:16px;
+  width:60%;
+  padding:14px 20px;
+  font-size:18px;
+  border-radius:20px 0 0 20px;
   border:none;
-  border-radius:28px 28px 0 0;
-  background:#8994E7;
+  background: rgba(137,148,231,0.25);
   color:white;
-  outline:#D1D4FF 2px solid;
-  box-shadow:0 0 20px rgba(137,148,231,0.4);
-  backdrop-filter: blur(15px);
-  transition:0.3s;
+  backdrop-filter: blur(12px);
 }
-
-#search-container input:focus {
-  background:#A0A8FF;
-  box-shadow:0 0 30px rgba(137,148,231,0.6);
-}
-
 #search-container button {
-  width:100%;
-  padding:16px 24px;
-  font-size:16px;
+  padding:14px 20px;
+  font-size:18px;
   border:none;
-  border-radius:0 0 28px 28px;
-  background:#8994E7;
-  outline:#D1D4FF 2px solid;
+  border-radius:0 20px 20px 0;
+  background: rgba(209,212,255,0.35);
   color:white;
   cursor:pointer;
-  box-shadow:0 0 20px rgba(137,148,231,0.4);
-  backdrop-filter: blur(15px);
   transition:0.3s;
-  margin-top:-2px;
 }
+#search-container button:hover {background: rgba(209,212,255,0.65);}
 
-#search-container button:hover {
-  background:#A0A8FF;
-  box-shadow:0 0 35px rgba(137,148,231,0.7);
-}
-
-/* ===== PLACEHOLDER BUTTONS ===== */
-#placeholder-buttons {
+/* ===== UTILITY / MENU BAR ===== */
+#menu-bar {
   display:flex;
   justify-content:center;
+  margin:40px auto;
   gap:20px;
-  margin-top:30px;
-  opacity:0;
-  animation:fadeInUp 1s forwards 0.9s;
 }
-
-.placeholder-btn {
-  width:150px;
-  height:100px;
-  background: #8994E7;
-  border:2px solid #D1D4FF;
-  border-radius:28px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
+#menu-bar button {
+  background: rgba(137,148,231,0.25);
+  border:none;
+  border-radius:22px;
+  padding:14px 20px;
+  color:white;
   cursor:pointer;
-  box-shadow:0 0 20px rgba(137,148,231,0.35);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  backdrop-filter: blur(12px);
+  box-shadow:0 0 15px rgba(180,210,255,0.35);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-
-.placeholder-btn:hover {
-  transform:scale(1.1);
-  box-shadow:0 0 45px rgba(180,160,255,0.65);
-}
-
-.placeholder-btn svg {
-  width:40px;
-  height:40px;
-  margin-bottom:6px;
+#menu-bar button svg {
+  width:24px;
+  height:24px;
   fill:white;
   animation: floatIcons 3.5s ease-in-out infinite;
 }
-
-@keyframes floatIcons {0%{transform: translateY(0px);}50%{transform: translateY(-4px);}100%{transform: translateY(0px);}}
-
-/* ===== EMBED AREA ===== */
-#embed-frame {
-  margin-top:30px;
-  width:90%;
-  flex-grow:1;
-  border:none;
-  border-radius:20px;
-  box-shadow:0 0 30px rgba(137,148,231,0.3);
-  backdrop-filter: blur(15px);
+#menu-bar button:hover {
+  transform: scale(1.1);
+  box-shadow:0 0 45px rgba(180,210,255,0.65);
 }
+
+/* ===== AREA OVERLAY ===== */
+.area {
+  display:none;
+  position:fixed;
+  top:0; left:0; width:100%; height:100%;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(25px);
+  z-index:20;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  color:#e8ecff;
+  padding:60px 20px 20px 20px;
+  text-align:center;
+  animation:fadeIn 0.4s ease forwards;
+}
+.area h2 { font-size:48px; margin-bottom:12px; text-shadow:0 0 14px rgba(180,210,255,.7);}
+.area p { font-size:20px; max-width:700px; line-height:1.5; opacity:.85;}
+.area .back {
+  position:absolute; top:15px; left:15px;
+  padding:10px 14px;
+  background: rgba(30,0,60,0.7);
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+  box-shadow:0 0 15px rgba(180,80,255,0.6);
+  transition:0.2s;
+}
+.area .back:hover {transform:scale(1.1); background:rgba(60,0,120,0.85);}
 
 /* ===== FOOTER ===== */
 #footer {
-  margin-top:20px;
+  position:fixed;
+  bottom:30px;
+  width:100%;
+  text-align:center;
   font-size:13px;
   color: rgba(255,255,255,0.7);
 }
 
 /* ===== ANIMATIONS ===== */
-@keyframes fadeInUp {0%{opacity:0; transform: translateY(20px);}100%{opacity:1; transform:translateY(0);}}
+@keyframes fadeIn {0%{opacity:0;}100%{opacity:1;}}
+@keyframes floatIcons {
+  0% {transform: translateY(0px) rotate(0deg);}
+  50% {transform: translateY(-3px) rotate(-1deg);}
+  100% {transform: translateY(0px) rotate(0deg);}
+}
 </style>
 </head>
 <body>
@@ -168,130 +174,136 @@ canvas {position:fixed; inset:0; z-index:-2; pointer-events:none;}
 
 <!-- SEARCH BAR -->
 <div id="search-container">
-  <input id="q" placeholder="Search DuckDuckGo">
-  <button onclick="go()">Search</button>
+  <form onsubmit="openSearchArea(); return false;">
+    <input id="q" placeholder="Search" autocomplete="off"/>
+    <button type="submit">Search</button>
+  </form>
 </div>
 
-<!-- PLACEHOLDER BUTTONS -->
-<div id="placeholder-buttons">
-  <div class="placeholder-btn" onclick="openArea('entertainment')">
-    <svg viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="10" stroke="white" stroke-width="1.5" fill="none"/>
-      <polygon points="10,8 16,12 10,16" fill="white"/>
-    </svg>
-    Entertainment
-  </div>
-  <div class="placeholder-btn" onclick="openArea('home')">
-    <svg viewBox="0 0 24 24">
-      <path fill="white" d="M12 3l9 8h-3v9h-4v-6h-4v6H6v-9H3z"/>
-    </svg>
-    Home
-  </div>
-  <div class="placeholder-btn" onclick="openArea('games')">
-    <svg viewBox="0 0 24 24">
-      <path fill="white" d="M6 6h12v12H6z"/>
-      <circle fill="#13152C" cx="9" cy="9" r="1"/>
-      <circle fill="#13152C" cx="15" cy="9" r="1"/>
-      <path fill="#13152C" d="M9 15h6v1H9z"/>
-    </svg>
-    Games
-  </div>
-  <div class="placeholder-btn" onclick="openArea('settings')">
-    <svg viewBox="0 0 24 24">
-      <path fill="white" d="M12 8a4 4 0 100 8 4 4 0 000-8zm8 4a8 8 0 01-1.5 4.5l1.7 1.7-1.4 1.4-1.7-1.7A8 8 0 0112 20a8 8 0 01-4.5-1.5l-1.7 1.7-1.4-1.4 1.7-1.7A8 8 0 014 12a8 8 0 011.5-4.5L3 5.8l1.4-1.4 1.7 1.7A8 8 0 0112 4a8 8 0 014.5 1.5l1.7-1.7 1.4 1.4-1.7 1.7A8 8 0 0120 12z"/>
-    </svg>
-    Settings
-  </div>
-  <div class="placeholder-btn" onclick="openArea('admin')">
-    <svg viewBox="0 0 24 24">
-      <path fill="white" d="M12 2L2 7v7c0 5 4 9 10 9s10-4 10-9V7l-10-5z"/>
-      <path fill="#13152C" d="M10 12l2 2 4-4"/>
-    </svg>
-    Admin Panel
+<!-- MENU BAR -->
+<div id="menu-bar">
+  <button onclick="openArea('entertainment')">
+    <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/></svg>Entertainment
+  </button>
+  <button onclick="openArea('home')">
+    <svg viewBox="0 0 24 24"><path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3z"/></svg>Home
+  </button>
+  <button onclick="openArea('games')">
+    <svg viewBox="0 0 24 24"><path d="M6 21h4v-4H6v4zm8-8h4v-4h-4v4zm0 8h4v-4h-4v4zm-8-8h4v-4H6v4zm4-8h4V1h-4v4zm-4 0h4V1H6v4zm8 0h4V1h-4v4z"/></svg>Games
+  </button>
+  <button onclick="openArea('settings')">
+    <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2v2h-4V4a2 2 0 0 1 2-2zm0 20a2 2 0 0 1-2-2v-2h4v2a2 2 0 0 1-2 2zm10-10a2 2 0 0 1-2 2h-2v-4h2a2 2 0 0 1 2 2zm-20 0a2 2 0 0 1 2-2h2v4H4a2 2 0 0 1-2-2z"/></svg>Settings
+  </button>
+  <button onclick="openArea('admin')">
+    <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/></svg>Admin Panel
+  </button>
+</div>
+
+<!-- AREA OVERLAY -->
+<div class="area" id="area-container">
+  <div class="back" onclick="closeArea()">← Back</div>
+  <div id="area-content">
+    <h2 id="area-title">Welcome</h2>
+    <p id="area-description">Select a menu item above to explore its area.</p>
+    <iframe id="frame" style="width:100%; height:75vh; border:none; margin-top:20px;"></iframe>
   </div>
 </div>
 
-<!-- EMBED AREA -->
-<iframe id="embed-frame"></iframe>
-
-<div id="footer">© Solar Smash may be broken • Roblox works • If banned use /School</div>
+<div id="footer">© The Agency</div>
 
 <script>
-/* ===== SEARCH BAR LOGIC ===== */
-function go(){
-  const q = document.getElementById("q").value.trim();
-  let url = "https://gas.education/math/hvtrs8%2F-dwcidwcigm.aoo%2F";
-  if(q) url += "%3Dq%3Fhgy%24"+encodeURIComponent(q)+"%3Due%60";
-  document.getElementById("embed-frame").src = url;
-}
-
-/* AREA PLACEHOLDER LOGIC */
-function openArea(area){
-  alert("You opened "+area+" area!");
-}
-
 /* ===== PARTICLES ===== */
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
 let w,h;
-function resize(){ w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
+function resize(){w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight;}
 window.addEventListener("resize",resize);
 resize();
 
-const particleColors = ["#6E78F7","#8285C6","#44498A"];
-const shapes = ["circle","triangle","star"];
-function randomStarPath(size){
-  const spikes = 5;
-  let rot=Math.PI/2*3, path=[], step=Math.PI/spikes;
-  for(let i=0;i<spikes;i++){
-    path.push({x: Math.cos(rot)*size, y: Math.sin(rot)*size});
-    rot+=step;
-    path.push({x: Math.cos(rot)*(size/2), y: Math.sin(rot)*(size/2)});
-    rot+=step;
-  }
-  return path;
-}
-
-const particles = Array.from({length:120},()=>{
-  const shape = shapes[Math.floor(Math.random()*shapes.length)];
-  return {
-    x: Math.random()*w,
-    y: Math.random()*h,
-    r: Math.random()*2+1,
-    dx: (Math.random()-0.5)*0.8,
-    dy: (Math.random()-0.5)*0.8,
-    a: Math.random()*0.5+0.5,
-    shape: shape,
-    color: particleColors[Math.floor(Math.random()*particleColors.length)],
-    starPath: shape==="star"?randomStarPath(Math.random()*3+2):null
-  };
-});
+const colors = ["#6E78F7","#8285C6","#44498A"];
+const particles = Array.from({length:80},()=>({
+  x:Math.random()*w,
+  y:Math.random()*h,
+  r:Math.random()*3+1,
+  dx:(Math.random()-0.5)*0.3,
+  dy:(Math.random()-0.5)*0.3,
+  a:Math.random()*0.5+0.5,
+  shape:Math.random()<0.5?"circle":"star",
+  color: colors[Math.floor(Math.random()*colors.length)]
+}));
 
 function draw(){
   ctx.clearRect(0,0,w,h);
-  particles.forEach(p=>{
+  for(const p of particles){
     ctx.beginPath();
-    if(p.shape==="circle") ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    else if(p.shape==="triangle"){
-      ctx.moveTo(p.x,p.y-p.r);
-      ctx.lineTo(p.x+p.r,p.y+p.r);
-      ctx.lineTo(p.x-p.r,p.y+p.r);
-      ctx.closePath();
-    } else if(p.shape==="star"){
-      ctx.moveTo(p.x,p.y);
-      p.starPath.forEach((pt,i)=>ctx[i===0?"moveTo":"lineTo"](p.x+pt.x,p.y+pt.y));
+    if(p.shape==="circle"){
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    } else {
+      // star shape
+      const spikes=5; const outer=p.r; const inner=p.r/2;
+      let rot=Math.PI/2*3;
+      let cx=p.x; let cy=p.y; let step=Math.PI/spikes;
+      ctx.moveTo(cx,cy-outer);
+      for(let i=0;i<spikes;i++){
+        let x=cx+Math.cos(rot)*outer;
+        let y=cy+Math.sin(rot)*outer;
+        ctx.lineTo(x,y);
+        rot+=step;
+        x=cx+Math.cos(rot)*inner;
+        y=cy+Math.sin(rot)*inner;
+        ctx.lineTo(x,y);
+        rot+=step;
+      }
       ctx.closePath();
     }
-    ctx.fillStyle=p.color;
+    ctx.fillStyle=`rgba(${parseInt(p.color.slice(1,3),16)},${parseInt(p.color.slice(3,5),16)},${parseInt(p.color.slice(5,7),16)},${p.a})`;
     ctx.shadowColor=p.color;
-    ctx.shadowBlur=5+p.r*3;
-    ctx.globalAlpha = p.a;
+    ctx.shadowBlur=8;
     ctx.fill();
-  });
+
+    p.x+=p.dx; p.y+=p.dy;
+    if(p.x<0||p.x>w)p.dx*=-1;
+    if(p.y<0||p.y>h)p.dy*=-1;
+  }
   requestAnimationFrame(draw);
 }
 draw();
-</script>
 
+/* ===== AREA LOGIC ===== */
+function openArea(area){
+  const areaContainer=document.getElementById("area-container");
+  const titleEl=document.getElementById("area-title");
+  const descEl=document.getElementById("area-description");
+  const frame=document.getElementById("frame");
+  areaContainer.style.display="flex";
+  frame.src="";
+
+  switch(area){
+    case "entertainment": titleEl.textContent="Entertainment"; descEl.textContent="Fun content coming soon!"; break;
+    case "home": titleEl.textContent="Home"; descEl.textContent="Welcome back!"; break;
+    case "games": titleEl.textContent="Games"; descEl.textContent="Play exciting games here!"; break;
+    case "settings": titleEl.textContent="Settings"; descEl.textContent="Adjust your preferences."; break;
+    case "admin": titleEl.textContent="Admin Panel"; descEl.textContent="Admin tools here."; break;
+    default: titleEl.textContent="Welcome"; descEl.textContent="Select a menu item above.";
+  }
+}
+
+function closeArea(){document.getElementById("area-container").style.display="none";}
+
+/* ===== SEARCH AREA ===== */
+function openSearchArea(){
+  const query=document.getElementById("q").value.trim();
+  const areaContainer=document.getElementById("area-container");
+  const titleEl=document.getElementById("area-title");
+  const descEl=document.getElementById("area-description");
+  const frame=document.getElementById("frame");
+
+  if(query==="") return;
+  areaContainer.style.display="flex";
+  titleEl.textContent="Search Results";
+  descEl.textContent="Results for: " + query;
+  frame.src="https://gas.education/math/hvtrs8%2F-dwcidwcigm.aoo%2F%" + encodeURIComponent(query) + "%3Due%60";
+}
+</script>
 </body>
 </html>
