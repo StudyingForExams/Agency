@@ -62,6 +62,14 @@ canvas {
   align-items: center;
   gap: 26px;
   text-align: center;
+  transition: opacity .6s ease, transform .6s ease;
+}
+
+/* ===== HIDE ANIMATION ===== */
+.hide-ui {
+  opacity: 0;
+  transform: scale(0.96);
+  pointer-events: none;
 }
 
 /* ===== TITLE ===== */
@@ -148,26 +156,24 @@ canvas {
   filter: brightness(0) invert(1);
 }
 
-/* ===== SEARCH OVERLAY ===== */
-#overlay {
+/* ===== EMBED VIEW ===== */
+#embed-view {
   position: fixed;
   inset: 0;
-  background: rgba(10,12,40,0.9);
-  backdrop-filter: blur(22px);
+  background: #0a0c28;
   display: none;
-  flex-direction: column;
-  z-index: 20;
-  animation: fadeIn 0.35s ease forwards;
+  z-index: 50;
+  animation: fadeIn .6s ease forwards;
 }
 
-#overlay iframe {
+#embed-view iframe {
   width: 100%;
   height: 100%;
   border: none;
 }
 
-.back {
-  position: absolute;
+#embed-back {
+  position: fixed;
   top: 16px;
   left: 16px;
   padding: 10px 14px;
@@ -175,7 +181,7 @@ canvas {
   border-radius: 12px;
   cursor: pointer;
   box-shadow: 0 0 15px rgba(110,120,247,0.7);
-  z-index: 25;
+  z-index: 60;
 }
 
 @keyframes fadeIn {
@@ -199,106 +205,61 @@ canvas {
   </div>
 
   <div id="menu-bar">
-    <button><img src="https://www.svgrepo.com/show/430129/television-technology-entertainment.svg">Entertainment</button>
-    <button><img src="https://www.svgrepo.com/show/333091/games.svg">Games</button>
-    <button><img src="https://www.svgrepo.com/show/471518/home-03.svg">Home</button>
-    <button><img src="https://www.svgrepo.com/show/506315/settings.svg">Settings</button>
-    <button><img src="https://www.svgrepo.com/show/372709/terminal.svg">Admin Panel</button>
+    <button onclick="openEmbed('entertainment')">
+      <img src="https://www.svgrepo.com/show/430129/television-technology-entertainment.svg">
+      Entertainment
+    </button>
+    <button onclick="openEmbed('games')">
+      <img src="https://www.svgrepo.com/show/333091/games.svg">
+      Games
+    </button>
+    <button onclick="openEmbed('chat')">
+      <img src="https://www.svgrepo.com/show/487431/group-chat.svg">
+      Chat
+    </button>
+    <button onclick="openEmbed('settings')">
+      <img src="https://www.svgrepo.com/show/506315/settings.svg">
+      Settings
+    </button>
+    <button onclick="openEmbed('admin')">
+      <img src="https://www.svgrepo.com/show/372709/terminal.svg">
+      Admin Panel
+    </button>
   </div>
 </div>
 
-<div id="overlay">
-  <div class="back" onclick="closeSearch()">← Back</div>
-  <iframe src=""></iframe>
+<!-- FULLSCREEN EMBED -->
+<div id="embed-view">
+  <div id="embed-back" onclick="closeEmbed()">← Back</div>
+  <iframe></iframe>
 </div>
 
 <script>
-/* ===== SEARCH ===== */
-function openSearch() {
-  document.querySelector("#overlay iframe").src =
-    "https://gas.education/math/hvtrs8%2F-dwcidwcigm.aoo%2F";
-  document.getElementById("overlay").style.display = "flex";
-}
-function closeSearch() {
-  document.getElementById("overlay").style.display = "none";
-  document.querySelector("#overlay iframe").src = "";
-}
+/* ===== EMBED URLS ===== */
+const EMBEDS = {
+  entertainment: "https://example.com",
+  games: "https://example.com",
+  chat: "https://example.com",
+  settings: "https://example.com",
+  admin: "https://example.com"
+};
 
-/* ===== PARTICLES ===== */
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-let w, h;
+function openEmbed(type){
+  document.getElementById("center-ui").classList.add("hide-ui");
 
-function resize() {
-  w = canvas.width = window.innerWidth;
-  h = canvas.height = window.innerHeight;
-}
-window.addEventListener("resize", resize);
-resize();
-
-const colors = ["#6E78F7","#8285C6","#44498A"];
-
-const particles = Array.from({length: 110}, () => ({
-  x: Math.random()*w,
-  y: Math.random()*h,
-  r: Math.random()*4 + 2,
-  dx: (Math.random()-0.5)*0.15,
-  dy: (Math.random()-0.5)*0.15,
-  c: colors[Math.floor(Math.random()*colors.length)],
-  a: Math.random()*0.6 + 0.4,
-  type: Math.floor(Math.random()*3)
-}));
-
-function drawStar(x,y,r,points){
-  const step = Math.PI / points;
-  ctx.beginPath();
-  for(let i=0;i<2*points;i++){
-    const rad = i%2===0 ? r : r/2;
-    ctx.lineTo(
-      x + Math.cos(i*step)*rad,
-      y + Math.sin(i*step)*rad
-    );
-  }
-  ctx.closePath();
+  setTimeout(() => {
+    const view = document.getElementById("embed-view");
+    view.style.display = "block";
+    view.querySelector("iframe").src = EMBEDS[type];
+  }, 600);
 }
 
-function draw() {
-  ctx.clearRect(0,0,w,h);
-  for (const p of particles) {
-    ctx.shadowColor = p.c;
-    ctx.shadowBlur = 22;
-
-    if(p.type===0){
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle = p.c;
-      ctx.globalAlpha = p.a;
-      ctx.fill();
-    } else if(p.type===1){
-      drawStar(p.x,p.y,p.r,5);
-      ctx.fillStyle = p.c;
-      ctx.globalAlpha = p.a;
-      ctx.fill();
-    } else {
-      ctx.beginPath();
-      ctx.moveTo(p.x, p.y-p.r);
-      ctx.lineTo(p.x+p.r, p.y+p.r);
-      ctx.lineTo(p.x-p.r, p.y+p.r);
-      ctx.closePath();
-      ctx.fillStyle = p.c;
-      ctx.globalAlpha = p.a;
-      ctx.fill();
-    }
-
-    p.x += p.dx;
-    p.y += p.dy;
-    if (p.x<0||p.x>w) p.dx*=-1;
-    if (p.y<0||p.y>h) p.dy*=-1;
-  }
-  ctx.globalAlpha = 1;
-  requestAnimationFrame(draw);
+function closeEmbed(){
+  const view = document.getElementById("embed-view");
+  view.style.display = "none";
+  view.querySelector("iframe").src = "";
+  document.getElementById("center-ui").classList.remove("hide-ui");
 }
-draw();
 </script>
 
 </body>
